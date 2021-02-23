@@ -1,0 +1,15 @@
+{
+  "name": "image-shrink-electron",
+  "version": "1.0.0",
+  "main": "main.js",
+  "author": "Guilherme Amado",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "dev": "nodemon --exec electron ."
+  },
+  "devDependencies": {
+    "electron": "^11.3.0",
+    "nodemon": "^2.0.7"
+  }
+}
