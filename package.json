@@ -12,5 +12,10 @@
     "electron": "^11.3.0",
     "nodemon": "^2.0.7"
   },
-  "dependencies": {}
+  "dependencies": {
+    "imagemin": "^7.0.1",
+    "imagemin-mozjpeg": "^9.0.0",
+    "imagemin-pngquant": "^9.0.1",
+    "slash": "^3.0.0"
+  }
 }
