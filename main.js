@@ -7,7 +7,6 @@ const imageminPngquant = require('imagemin-pngquant');
 const slash = require('slash');
 
 process.env.NODE_ENV = 'development';
-console.log(process.platform);
 
 const isDev = process.env.NODE_ENV !== 'production';
 const isMac = process.platform === 'darwin';
@@ -60,6 +59,7 @@ app.on('ready', () => {
 });
 
 async function shrinkImage({ imgPath, quality, dest }) {
+  if (!imgPath) return;
   try {
     const pngQuality = quality / 100;
     const files = await imagemin([slash(imgPath)], {
@@ -70,7 +70,7 @@ async function shrinkImage({ imgPath, quality, dest }) {
       ],
     });
 
-    console.log(files);
+    mainWindow.webContents.send('image:done');
     shell.openPath(dest);
   } catch (error) {
     console.log(error);
