@@ -1,15 +1,20 @@
 {
   "name": "image-shrink-electron",
+  "productName": "ImageShrink",
   "version": "1.0.0",
   "main": "main.js",
   "author": "Guilherme Amado",
   "license": "MIT",
   "scripts": {
     "start": "electron .",
-    "dev": "nodemon --exec electron ."
+    "dev": "nodemon --exec electron .",
+    "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=release-builds",
+    "package-win": "electron-packager . --overwrite --platform=win32 --arch=ia32 --icon=assets/icons/win/icon.ico --prune=false --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"ImageShrink\"",
+    "package-linux": "electron-packager . --overwrite --platform=linux --arch=x64 --icon=assets/icons/png/1024x1024.png --out=release-builds"
   },
   "devDependencies": {
     "electron": "^11.3.0",
+    "electron-packager": "^15.2.0",
     "nodemon": "^2.0.7"
   },
   "dependencies": {
