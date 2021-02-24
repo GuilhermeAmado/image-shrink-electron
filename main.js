@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, globalShortcut } = require('electron');
+const { app, BrowserWindow, Menu } = require('electron');
 
 process.env.NODE_ENV = 'development';
 console.log(process.platform);
@@ -7,6 +7,7 @@ const isDev = process.env.NODE_ENV !== 'production';
 const isMac = process.platform === 'darwin';
 
 let mainWindow;
+let aboutWindow;
 
 function createMainWindow() {
   mainWindow = new BrowserWindow({
@@ -21,36 +22,74 @@ function createMainWindow() {
   mainWindow.loadFile('./app/index.html');
 }
 
+function createAboutWindow() {
+  aboutWindow = new BrowserWindow({
+    title: 'About ImageShrink',
+    width: 300,
+    height: 300,
+    icon: './assets/icons/Icon_256x256.png',
+    resizable: false,
+    backgroundColor: 'white',
+  });
+
+  aboutWindow.setMenu(null);
+
+  aboutWindow.loadFile('./app/about.html');
+}
+
 app.on('ready', () => {
   createMainWindow();
 
   const mainMenu = Menu.buildFromTemplate(menu);
   Menu.setApplicationMenu(mainMenu);
 
-  globalShortcut.register('CmdOrCtrl+R', () => mainWindow.reload());
-  globalShortcut.register(isMac ? 'Command+Alt+I' : 'Ctrl+Shift+I', () =>
-    mainWindow.toggleDevTools()
-  );
-
   mainWindow.on('ready', () => (mainWindow = null));
 });
 
 const menu = [
+  ...(isMac
+    ? [
+        {
+          label: app.name,
+          submenu: [
+            {
+              label: 'About',
+              click: createAboutWindow,
+            },
+          ],
+        },
+      ]
+    : []),
   {
-    label: 'File',
-    submenu: [
-      {
-        label: 'Quit',
-        accelerator: 'CmdOrCtrl+W',
-        click: () => app.quit(),
-      },
-    ],
+    role: 'fileMenu',
   },
+  ...(!isMac
+    ? [
+        {
+          label: 'Help',
+          submenu: [
+            {
+              label: 'About',
+              click: createAboutWindow,
+            },
+          ],
+        },
+      ]
+    : []),
+  ...(isDev
+    ? [
+        {
+          label: 'Developer',
+          submenu: [
+            { role: 'reload' },
+            { role: 'forceReload' },
+            { type: 'separator' },
+            { role: 'toggleDevTools' },
+          ],
+        },
+      ]
+    : []),
 ];
-
-if (isMac) {
-  menu.unshift({ role: 'appMenu' });
-}
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
